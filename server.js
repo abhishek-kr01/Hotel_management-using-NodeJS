@@ -218,11 +218,13 @@ app.get("/", function (req, res) {
 // ------Import the router files---------------
 const personRouter = require("./routes/personRoutes");
 const menuItemRoute = require("./routes/menuItemRoutes");
+require("dotenv").config();
+const PORT = process.env.PORT || 3000;
 
 //Use the routers
 app.use("/person", personRouter);
 app.use("/menuitem", menuItemRoute);
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log(`listening on port 3000`);
 });
