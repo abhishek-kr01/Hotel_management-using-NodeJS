@@ -33,9 +33,23 @@ router.get("/", async (req, res) => {
   }
 });
 
+//------get taste data on the basis of taste--------
+
 router.get("/:taste", async (req, res) => {
+  const taste = req.params.taste; //Extract the taste form the URL paramaeter
   try {
-  } catch (error) {}
+    if (taste == "sweet" || taste == "spicy" || taste == "sour") {
+      const response = await MenuItem.find({ taste: taste });
+      console.log("response fetched");
+      res.status(200).json(response);
+    } else {
+      console.log("not found");
+      res.status(404).json({ error: "No found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Enternal server error" });
+  }
 });
 
 module.exports = router;

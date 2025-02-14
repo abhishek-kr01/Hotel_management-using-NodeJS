@@ -98,19 +98,19 @@ console.log("server file is running...");
 // console.log(typeof jsonString);
 
 // -------------------express--CRUD---------------
-const express = require("express");
-const app = express();
-const db = require("./db");
+// const express = require("express");
+// const app = express();
+// const db = require("./db");
 
-const bodyParser = require("body-parser");
-app.use(bodyParser.json()); //req.body
+// const bodyParser = require("body-parser");
+// app.use(bodyParser.json()); //req.body
 
 // const Person = require("./models/Person");
 // const MenuItem = require("./models/MenuItem");
 
-app.get("/", function (req, res) {
-  res.send("Welcome to my hotel... How can i help you sir...?");
-});
+// app.get("/", function (req, res) {
+//   res.send("Welcome to my hotel... How can i help you sir...?");
+// });
 
 //----------avoide callback-----------
 // POST route to add a person
@@ -215,16 +215,40 @@ app.get("/", function (req, res) {
 //   }
 // });
 
-// ------Import the router files---------------
-const personRouter = require("./routes/personRoutes");
-const menuItemRoute = require("./routes/menuItemRoutes");
+const express = require("express");
+const app = express();
+const db = require("./db");
 require("dotenv").config();
+const passport = require("./auth");
+
+const bodyParser = require("body-parser");
+app.use(bodyParser.json()); // req.body
 const PORT = process.env.PORT || 3000;
 
-//Use the routers
-app.use("/person", personRouter);
-app.use("/menuitem", menuItemRoute);
+// -------------Middleware Function-----------
+const logRequest = (req, res, next) => {
+  console.log(
+    `[${new Date().toLocaleString()}] Request Made to : ${req.originalUrl}`
+  );
+  next(); // Move on to the next phase
+};
+app.use(logRequest);
+
+app.use(passport.initialize());
+const localAuthMiddleware = passport.authenticate("local", { session: false });
+
+app.get("/", function (req, res) {
+  res.send("Welcome to our Hotel");
+});
+
+// Import the router files
+const personRoutes = require("./routes/personRoutes");
+const menuItemRoutes = require("./routes/menuItemRoutes");
+
+// Use the routers
+app.use("/person", personRoutes);
+app.use("/menu", menuItemRoutes);
 
 app.listen(PORT, () => {
-  console.log(`listening on port 3000`);
+  console.log("listening on port 3000");
 });
