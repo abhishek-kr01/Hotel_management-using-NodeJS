@@ -4,7 +4,7 @@ A scalable backend system for managing restaurant operations such as employees a
 
 This project demonstrates backend architecture, REST API design, database modeling, authentication basics, and modular code structure.
 
-🚀 Features
+🚀 Features  
 ✅ Employee Management
 
 Create new employees
